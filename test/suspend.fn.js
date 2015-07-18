@@ -26,6 +26,19 @@ describe('suspend.fn(fn*)', function() {
 		assert.throws(fn.bind(null, 'foo'), /must be a GeneratorFunction/);
 		done();
 	});
+
+	it('should conserve the arity of the generator function', function(done) {
+		var ret = fn(function* () {});
+		assert.strictEqual(ret.length, 0);
+
+		ret = fn(function* (a) {});
+		assert.strictEqual(ret.length, 1);
+
+		ret = fn(function* (a, b, c, d) {});
+		assert.strictEqual(ret.length, 4);
+
+		done();
+	});
 });
 
 describe('suspend.fn(fn*)()', function() {
