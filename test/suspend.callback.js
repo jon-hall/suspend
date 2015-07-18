@@ -26,6 +26,20 @@ describe('suspend.callback(fn*)', function() {
 		assert.throws(callback.bind(null, 'foo'), /must be a GeneratorFunction/);
 		done();
 	});
+
+	it('should conserve the arity of the generator function (plus one - for ' +
+		'the callback)', function(done) {
+		var ret = callback(function* () {});
+		assert.strictEqual(ret.length, 0 + 1);
+
+		ret = callback(function* (a) {});
+		assert.strictEqual(ret.length, 1 + 1);
+
+		ret = callback(function* (a, b, c, d) {});
+		assert.strictEqual(ret.length, 4 + 1);
+
+		done();
+	});
 });
 
 describe('suspend.callback(fn*)()', function() {
